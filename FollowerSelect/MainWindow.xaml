@@ -1,0 +1,39 @@
+﻿<Window x:Class="FollowerSelect.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="743.553" Width="783.504">
+    <Window.Resources>
+        <DataTemplate x:Key="ArrayTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding [0]}"/>
+                <TextBlock Text=" : "/>
+                <TextBlock Text="{Binding [1]}"/>
+                <TextBlock Text=" : "/>
+                <TextBlock Text="{Binding [2]}"/>
+            </StackPanel>
+        </DataTemplate>
+
+    </Window.Resources>
+    <Grid>
+        <DataGrid HorizontalAlignment="Left" Margin="10,44,0,0" VerticalAlignment="Top" Height="145" Width="756"/>
+
+        <GroupBox Header="结论" HorizontalAlignment="Left" Margin="10,194,0,0" VerticalAlignment="Top" Height="424" Width="756">
+
+            <Grid>
+                <ListBox x:Name="lsbMission1" HorizontalAlignment="Left" Height="353" Margin="10,39,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
+                <ListBox x:Name="lsbMission2" HorizontalAlignment="Left" Height="353" Margin="135,39,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
+                <ListBox x:Name="lsbMission3" HorizontalAlignment="Left" Height="353" Margin="260,39,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
+                <ListBox x:Name="lsbMission4" HorizontalAlignment="Left" Height="353" Margin="385,39,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
+                <ListBox x:Name="lsbRe" HorizontalAlignment="Left" Height="353" Margin="510,39,0,0" VerticalAlignment="Top" Width="215" ItemsSource="{Binding}" SelectionChanged="lsbRe_SelectionChanged"/>
+                <Label Content="任务一安排" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top"/>
+                <Label Content="任务二安排" HorizontalAlignment="Left" Margin="135,9,0,0" VerticalAlignment="Top"/>
+                <Label Content="任务三安排" HorizontalAlignment="Left" Margin="260,9,0,0" VerticalAlignment="Top"/>
+                <Label Content="任务四安排" HorizontalAlignment="Left" Margin="385,9,0,0" VerticalAlignment="Top"/>
+
+            </Grid>
+        </GroupBox>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="686,623,0,0" VerticalAlignment="Top" Width="80" Height="80" Click="Button_Click"/>
+        <TextBox x:Name="txb" HorizontalAlignment="Left" Height="23" Margin="561,675,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="cbbZone" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="259" Height="29"/>
+    </Grid>
+</Window>
