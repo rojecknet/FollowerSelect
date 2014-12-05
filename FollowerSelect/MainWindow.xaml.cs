@@ -20,6 +20,9 @@ namespace FollowerSelect
     {
         public List<TMyFollower> myEpicFollowers;
         public List<TMyFollower> myOtherFollowers;
+        public List<TOptedRe> OptedResult;
+        public Dictionary<int, string> AbbilityDef = new Dictionary<int, string>();
+        public bool isMyFollowerReaded = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -27,82 +30,153 @@ namespace FollowerSelect
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            List<int> Test = new List<int>(new int[] { 1, 2, 3, 4, 5, 6 });
-            List<int>[] Missions ={ new List<int>(new int[] { 1, 2, 3, 6, 7, 9 }),
+            try
+            {
+
+                List<int> Test = new List<int>(new int[] { 1, 2, 3, 4, 5, 6 });
+                List<int>[] Missions ={ new List<int>(new int[] { 1, 2, 3, 6, 7, 9 }),
                 new List<int>(new int[] { 4, 4, 5, 6, 8, 9 }),
                 new List<int>(new int[] { 1, 1, 3, 5, 7, 8 }),
                 new List<int>(new int[] { 1, 2, 6, 7, 7, 9 }) };
-            List<List<TSolOne>> Solutions = new List<List<TSolOne>>();
-            List<int> CurrArrangement;
-            List<TRe> Followers = new List<TRe>();
-            for (int missionCount = 0; missionCount < 4; missionCount++)
-            {
-                ListBox lsbNow = this.FindName("lsbMission" + (missionCount + 1).ToString()) as ListBox;
-                Solutions.Add(FindSolution(Missions[missionCount]));
-                lsbNow.DataContext = Solutions[missionCount];
-            }
-
-            for (int index0 = 0; index0 < Solutions[0].Count; index0++)
-            {
-                for (int index1 = 0; index1 < Solutions[1].Count; index1++)
+                List<List<TSolOne>> Solutions = new List<List<TSolOne>>();
+                List<int> CurrArrangement;
+                List<TRe> InitFollowers = new List<TRe>();
+                for (int missionCount = 0; missionCount < 4; missionCount++)
                 {
+                    ListBox lsbNow = this.FindName("lsbMission" + (missionCount + 1).ToString()) as ListBox;
+                    Solutions.Add(FindSolution(Missions[missionCount]));
+                    lsbNow.DataContext = Solutions[missionCount];
+                }
 
-                    for (int index2 = 0; index2 < Solutions[2].Count; index2++)
+                for (int index0 = 0; index0 < Solutions[0].Count; index0++)
+                {
+                    for (int index1 = 0; index1 < Solutions[1].Count; index1++)
                     {
-                        for (int index3 = 0; index3 < Solutions[3].Count; index3++)
+
+                        for (int index2 = 0; index2 < Solutions[2].Count; index2++)
                         {
-                            CurrArrangement = new List<int>();
-                            if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[0]))
-                                CurrArrangement.Add(Solutions[0][index0].SolPair[0]);
-                            if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[1]))
-                                CurrArrangement.Add(Solutions[0][index0].SolPair[1]);
-                            if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[2]))
-                                CurrArrangement.Add(Solutions[0][index0].SolPair[2]);
-                            if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[0]))
-                                CurrArrangement.Add(Solutions[1][index1].SolPair[0]);
-                            if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[1]))
-                                CurrArrangement.Add(Solutions[1][index1].SolPair[1]);
-                            if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[2]))
-                                CurrArrangement.Add(Solutions[1][index1].SolPair[2]);
-                            if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[0]))
-                                CurrArrangement.Add(Solutions[2][index2].SolPair[0]);
-                            if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[1]))
-                                CurrArrangement.Add(Solutions[2][index2].SolPair[1]);
-                            if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[2]))
-                                CurrArrangement.Add(Solutions[2][index2].SolPair[2]);
-                            if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[0]))
-                                CurrArrangement.Add(Solutions[3][index3].SolPair[0]);
-                            if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[1]))
-                                CurrArrangement.Add(Solutions[3][index3].SolPair[1]);
-                            if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[2]))
-                                CurrArrangement.Add(Solutions[3][index3].SolPair[2]);
-                            TRe AbbilityArrangement = new TRe();
-                            AbbilityArrangement.FollowerCnts = CurrArrangement.Count;
-                            AbbilityArrangement.SolIndex[0] = index0;
-                            AbbilityArrangement.SolIndex[1] = index1;
-                            AbbilityArrangement.SolIndex[2] = index2;
-                            AbbilityArrangement.SolIndex[3] = index3;
-                            AbbilityArrangement.FollowerSelect = CurrArrangement;
-                            Followers.Add(AbbilityArrangement);
+                            for (int index3 = 0; index3 < Solutions[3].Count; index3++)
+                            {
+                                CurrArrangement = new List<int>();
+                                if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[0]))
+                                    CurrArrangement.Add(Solutions[0][index0].SolPair[0]);
+                                if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[1]))
+                                    CurrArrangement.Add(Solutions[0][index0].SolPair[1]);
+                                if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[2]))
+                                    CurrArrangement.Add(Solutions[0][index0].SolPair[2]);
+                                if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[0]))
+                                    CurrArrangement.Add(Solutions[1][index1].SolPair[0]);
+                                if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[1]))
+                                    CurrArrangement.Add(Solutions[1][index1].SolPair[1]);
+                                if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[2]))
+                                    CurrArrangement.Add(Solutions[1][index1].SolPair[2]);
+                                if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[0]))
+                                    CurrArrangement.Add(Solutions[2][index2].SolPair[0]);
+                                if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[1]))
+                                    CurrArrangement.Add(Solutions[2][index2].SolPair[1]);
+                                if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[2]))
+                                    CurrArrangement.Add(Solutions[2][index2].SolPair[2]);
+                                if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[0]))
+                                    CurrArrangement.Add(Solutions[3][index3].SolPair[0]);
+                                if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[1]))
+                                    CurrArrangement.Add(Solutions[3][index3].SolPair[1]);
+                                if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[2]))
+                                    CurrArrangement.Add(Solutions[3][index3].SolPair[2]);
+                                TRe AbbilityArrangement = new TRe();
+                                AbbilityArrangement.FollowerCnts = CurrArrangement.Count;
+                                AbbilityArrangement.SolIndex[0] = index0;
+                                AbbilityArrangement.SolIndex[1] = index1;
+                                AbbilityArrangement.SolIndex[2] = index2;
+                                AbbilityArrangement.SolIndex[3] = index3;
+                                AbbilityArrangement.AbbilityPairSelect = CurrArrangement;
+                                InitFollowers.Add(AbbilityArrangement);
+                            }
                         }
                     }
                 }
-            }
-            //所需追随者数量排序
-            List<TRe> SortedFolloers = new List<TRe>();
-            SortedFolloers = Followers.OrderBy(x => x.FollowerCnts).ToList();
-            //优化结果，去除冗余结果
-            for (int itrStart = 0; itrStart < SortedFolloers.Count; itrStart++)
-            {
-
-                for (int itrEnd = SortedFolloers.Count - 1; itrEnd > itrStart; itrEnd--)
+                //所需追随者数量排序
+                List<TRe> SortedFolloers = new List<TRe>();
+                SortedFolloers = InitFollowers.OrderBy(x => x.FollowerCnts).ToList();
+                //优化结果，去除冗余结果
+                for (int itrStart = 0; itrStart < SortedFolloers.Count; itrStart++)
                 {
-                    if (SortedFolloers[itrEnd].Contains(SortedFolloers[itrStart]))
-                        SortedFolloers.RemoveAt(itrEnd);
+
+                    for (int itrEnd = SortedFolloers.Count - 1; itrEnd > itrStart; itrEnd--)
+                    {
+                        if (SortedFolloers[itrEnd].Contains(SortedFolloers[itrStart]))
+                            SortedFolloers.RemoveAt(itrEnd);
+                    }
                 }
+                //lsbRe.DataContext = SortedFolloers;
+                txb.Text = SortedFolloers.Count.ToString();
+                MessageBox.Show("任务分组完毕");
+                if (isMyFollowerReaded)
+                {
+                    OptedResult = new List<TOptedRe>();
+                    foreach (TRe result in SortedFolloers)
+                    {
+                        TOptedRe optedArrangement = new TOptedRe();
+                        optedArrangement.MissionArrangement = result;
+                        foreach (int AbbPair in result.AbbilityPairSelect)
+                        {
+                            int isCountered = 0; //0无法全部对应，1可以全部对应，2可能可以全部对应
+                            foreach (TMyFollower follower in myEpicFollowers) //紫色随从对应
+                            {
+                                isCountered = follower.Counterable(AbbPair);
+                                if (isCountered == 1)
+                                    break;
+                            }
+                            if (isCountered == 1)
+                            {
+                                optedArrangement.CounteredCnt++;
+                                continue;
+                            }
+                            foreach (TMyFollower follower in myOtherFollowers)
+                            {
+                                isCountered = follower.Counterable(AbbPair);
+                                if (isCountered == 2)
+                                    break;
+                            }
+                            if (isCountered == 2)
+                            {
+                                optedArrangement.MayFullyCounteredCnt++;
+                                continue;
+                            }
+                            optedArrangement.CannotCounteredCnt++;
+                        }
+                        if (optedArrangement.CounteredCnt + optedArrangement.CannotCounteredCnt + optedArrangement.MayFullyCounteredCnt == optedArrangement.MissionArrangement.AbbilityPairSelect.Count)
+                            OptedResult.Add(optedArrangement);
+                        else
+                        {
+                            MessageBox.Show("技能错误");
+                        }
+                    }
+                    //List<TOptedRe> SortedOptedResult;
+                    if (rdb1.IsChecked.Value)  //总
+                    {
+                        OptedResult = OptedResult.OrderBy(x => x.MissionArrangement.FollowerCnts).ToList();
+                    }
+                    if (rdb1.IsChecked.Value)  //已
+                    {
+                        OptedResult = OptedResult.OrderByDescending(x => x.CounteredCnt).ToList();
+                    }
+                    if (rdb1.IsChecked.Value)  //可
+                    {
+                        OptedResult = OptedResult.OrderBy(x => x.MayFullyCounteredCnt).ToList();
+                    }
+                    if (rdb1.IsChecked.Value)  //未
+                    {
+                        OptedResult = OptedResult.OrderBy(x => x.CannotCounteredCnt).ToList();
+                    }
+
+                    lsbOptedRe.DataContext = OptedResult;
+                }
+
             }
-            lsbRe.DataContext = SortedFolloers;
-            txb.Text = SortedFolloers.Count.ToString();
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
 
@@ -144,14 +218,12 @@ namespace FollowerSelect
             return Result;
         }
 
-        /// <summary>
         /// 将CSV文件的数据读取到DataTable中
         /// </summary>
         /// <param name="fileName">CSV文件路径</param>
         /// <returns>返回读取了CSV数据的DataTable</returns>
         public static DataTable OpenCSV(string filePath)
         {
-            //Encoding encoding = Encoding.GetEncoding(filePath);//  GetType(filePath); //Encoding.ASCII;//
             DataTable dt = new DataTable();
             FileStream fs = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             StreamReader sr = new StreamReader(fs, Encoding.GetEncoding("gb2312"));
@@ -176,10 +248,14 @@ namespace FollowerSelect
                 else
                 {
                     aryLine = strLine.Split(',');
+
                     DataRow dr = dt.NewRow();
                     for (int j = 0; j < columnCount; j++)
                     {
-                        dr[j] = aryLine[j];
+                        if (j >= aryLine.Count())
+                            dr[j] = "";
+                        else
+                            dr[j] = aryLine[j];
                     }
                     dt.Rows.Add(dr);
                 }
@@ -193,7 +269,7 @@ namespace FollowerSelect
             return dt;
         }
 
-        private void lsbRe_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /*private void lsbRe_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TRe sel = lsbRe.SelectedItem as TRe;
             lsbMission1.SelectedIndex = sel.SolIndex[0];
@@ -201,105 +277,244 @@ namespace FollowerSelect
             lsbMission3.SelectedIndex = sel.SolIndex[2];
             lsbMission4.SelectedIndex = sel.SolIndex[3];
 
-        }
+        }*/
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "CSV文件|*.csv|All files (*.*)|*.*";
-            openFileDialog.RestoreDirectory = true;
-            openFileDialog.FilterIndex = 1;
-            if (openFileDialog.ShowDialog() == true)
+            try
             {
-                DataTable dt = OpenCSV(openFileDialog.FileName);
-                dtgMy.DataContext = dt;
-                myEpicFollowers = new List<TMyFollower>();
-                foreach(DataRow row in dt.Rows)
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "CSV文件|*.csv|All files (*.*)|*.*";
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.FilterIndex = 1;
+                if (openFileDialog.ShowDialog() == true)
                 {
-                    
-                    //MessageBox.Show(row.ItemArray[6].ToString());
-                    if (int.Parse(row.ItemArray[2].ToString())==4) //紫色追随者
+                    DataTable dt = OpenCSV(openFileDialog.FileName);
+                    dtgMy.DataContext = dt;
+                    myEpicFollowers = new List<TMyFollower>();
+                    myOtherFollowers = new List<TMyFollower>();
+                    foreach (DataRow row in dt.Rows)
                     {
-                        int abb1 = FindAbbility(row.ItemArray[6].ToString());
-                        int abb2 = FindAbbility(row.ItemArray[7].ToString());
-                        int abb = abb1 * 10 + abb2;
-                        if(row.ItemArray[8].ToString()=="超级舞王"
-                            ||row.ItemArray[9].ToString()=="超级舞王"
-                            ||row.ItemArray[10].ToString()=="超级舞王")
+
+                        //MessageBox.Show(row.ItemArray[6].ToString());
+                        if (int.Parse(row.ItemArray[2].ToString()) == 4) //紫色追随者
                         {
-                            int abb3 = 6;
-                            //(abb1<abb2？abb1:abb2)
+                            int abb1 = FindAbbility(row.ItemArray[6].ToString());
+                            int abb2 = FindAbbility(row.ItemArray[7].ToString());
+                            int abb = abb1 * 10 + abb2;
+                            /* if(row.ItemArray[8].ToString()=="超级舞王"
+                                 ||row.ItemArray[9].ToString()=="超级舞王"
+                                 ||row.ItemArray[10].ToString()=="超级舞王")
+                             {
+                                 int abb3 = 6;
+                                 //(abb1<abb2？abb1:abb2)
+                             }*/
+                            TMyFollower epicfollower = new TMyFollower(row.ItemArray[0].ToString(), int.Parse(row.ItemArray[3].ToString()), 4, abb);
+                            myEpicFollowers.Add(epicfollower);
+                        }
+                        else if (int.Parse(row.ItemArray[2].ToString()) == 2 || int.Parse(row.ItemArray[2].ToString()) == 3)
+                        {
+                            int abb1 = FindAbbility(row.ItemArray[6].ToString());
+                            TMyFollower otherfollower = new TMyFollower(row.ItemArray[0].ToString(), int.Parse(row.ItemArray[3].ToString()), int.Parse(row.ItemArray[2].ToString()), abb1);
+                            myOtherFollowers.Add(otherfollower);
                         }
                     }
+                    isMyFollowerReaded = true;
+                    btn1.Content = "点我";
+                    btn1.IsEnabled = true;
 
-                   // TMyFollower follower = new TMyFollower(row.Cells[0].ToString(), )
-                    
+                }
+                else
+                {
+                    MessageBox.Show("用户取消");
                 }
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("用户取消");
+                MessageBox.Show(ex.Message);
             }
         }
 
         private int FindAbbility(string abb)
         {
-            int result = 0;
-            if (abb.Equals("限时战斗"))
-                result = 1;
-            else if (abb.Equals("强力法术"))
-                result = 2;
-            else if (abb.Equals("重击"))
-                result = 3;
-            else if (abb.Equals("群体伤害"))
-                result = 4;
-            else if (abb.Equals("爪牙围攻"))
-                result = 5;
-            else if (abb.Equals("危险区域"))
-                result = 6;
-            else if (abb.Equals("致命爪牙"))
-                result = 7;
-            else if (abb.Equals("魔法减益"))
-                result = 8;
-            else if (abb.Equals("野生怪物入侵"))
-                result = 9;
-            else if (abb.Equals(""))
-                result = 0;
-            else
+            foreach (KeyValuePair<int, string> abbDef in AbbilityDef)
             {
-                MessageBox.Show("技能错误");
-                return -1;
+                if (abb.Equals(abbDef.Value))
+                    return abbDef.Key;
             }
-            return result;
+            //if (abb.Equals(""))
+            //    return 0;
+            MessageBox.Show("技能错误");
+            return -1;
+        }
+
+        private string GetAbbName(int abb)
+        {
+            string AbbName="";
+            if(abb>0 && abb<10)
+            {
+                AbbName = AbbilityDef[abb];
+            }
+            else if(abb>=10 && abb<100)
+            {
+                int first = abb / 10;
+                int second = abb % 10;
+                AbbName = AbbilityDef[first] + "+" + AbbilityDef[second];
+            }
+            else if(abb>=100 && abb<1000)
+            {
+
+            }
+
+            return AbbName;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            AbbilityDef.Add(0, "");
+            AbbilityDef.Add(1, "限时战斗");
+            AbbilityDef.Add(2, "强力法术");
+            AbbilityDef.Add(3, "重击");
+            AbbilityDef.Add(4, "群体伤害");
+            AbbilityDef.Add(5, "爪牙围攻");
+            AbbilityDef.Add(6, "危险区域");
+            AbbilityDef.Add(7, "致命爪牙");
+            AbbilityDef.Add(8, "魔法减益");
+            AbbilityDef.Add(9, "野生怪物入侵");
+            DataTable MissionHighMual = new DataTable();
+            MissionHighMual.Columns.Add("任务");
+            MissionHighMual.Columns.Add("限时战斗");
+            MissionHighMual.Columns.Add("强力法术");
+            MissionHighMual.Columns.Add("重击");
+            MissionHighMual.Columns.Add("群体伤害");
+            MissionHighMual.Columns.Add("爪牙围攻");
+            MissionHighMual.Columns.Add("危险区域");
+            MissionHighMual.Columns.Add("致命爪牙");
+            MissionHighMual.Columns.Add("魔法减益");
+            MissionHighMual.Columns.Add("野生怪物入侵");
+
+            MissionHighMual.Rows.Add(new string[] { "一", "1", "1", "1", "", "", "1", "1", "", "1" });
+            MissionHighMual.Rows.Add(new string[] { "二", "", "", "", "2", "1", "1", "", "1", "1" });
+            MissionHighMual.Rows.Add(new string[] { "三", "2", "", "1", "", "1", "", "1", "1", "" });
+            MissionHighMual.Rows.Add(new string[] { "四", "1", "1", "", "", "", "1", "2", "", "1" });
+            dtgMission.DataContext = MissionHighMual;
+        }
+
+        private void rdb1_Checked(object sender, RoutedEventArgs e)
+        {
+            if (OptedResult != null)
             {
+                OptedResult = OptedResult.OrderBy(x => x.MissionArrangement.FollowerCnts).ToList();
+                lsbOptedRe.DataContext = OptedResult;
             }
-            catch (Exception ex)
+
+        }
+
+        private void rdb2_Checked(object sender, RoutedEventArgs e)
+        {
+            if (OptedResult != null)
             {
-                MessageBox.Show(ex.Message);
+                OptedResult = OptedResult.OrderByDescending(x => x.CounteredCnt).ToList();
+                lsbOptedRe.DataContext = OptedResult;
             }
+  }
+
+        private void rdb3_Checked(object sender, RoutedEventArgs e)
+        {
+            if (OptedResult != null)
+            { 
+                OptedResult = OptedResult.OrderBy(x => x.MayFullyCounteredCnt).ToList();
+                lsbOptedRe.DataContext = OptedResult;
+            }
+        }
+
+        private void rdb4_Checked(object sender, RoutedEventArgs e)
+        {
+            if (OptedResult != null)
+            { 
+                OptedResult = OptedResult.OrderBy(x => x.CannotCounteredCnt).ToList();
+                lsbOptedRe.DataContext = OptedResult;
+            }
+        }
+
+        private void lsbOptedRe_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TOptedRe selRe = lsbOptedRe.SelectedItem as TOptedRe;
+            lsbMission1.SelectedIndex = selRe.MissionArrangement.SolIndex[0];
+            lsbMission2.SelectedIndex = selRe.MissionArrangement.SolIndex[1];
+            lsbMission3.SelectedIndex = selRe.MissionArrangement.SolIndex[2];
+            lsbMission4.SelectedIndex = selRe.MissionArrangement.SolIndex[3];
+            DataTable dtCountered = new DataTable();
+            dtCountered.Columns.Add("技能组合");
+            dtCountered.Columns.Add("应对追随者");
+            DataTable dtMayCountered = new DataTable();
+            dtMayCountered.Columns.Add("技能组合");
+            dtMayCountered.Columns.Add("应对追随者");
+            DataTable dtCannotCountered = new DataTable();
+            dtCannotCountered.Columns.Add("技能组合");
+            dtCannotCountered.Columns.Add("应对追随者");
+
+            foreach(int abb in selRe.MissionArrangement.AbbilityPairSelect)
+            {
+                int iscountered = 0;//0无法全部对应，1可以全部对应，2可能可以全部对应
+                string followersName = "";
+                foreach(TMyFollower epicFollower in myEpicFollowers)
+                {
+                    //iscountered = epicFollower.Counterable(abb);
+                    if (epicFollower.Counterable(abb) == 1)
+                    {
+                        followersName += epicFollower.Name + "：";
+                        iscountered = 1;
+                    }
+                }
+                if(iscountered != 1)
+                {
+                    foreach(TMyFollower otherFollower in myOtherFollowers)
+                    {
+                        if(otherFollower.Counterable(abb) == 2)
+                        {
+                            followersName += otherFollower.Name + "：";
+                            iscountered = 2;
+                        }
+                    }
+                }
+                if(iscountered == 0)
+                {
+                    dtCannotCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
+
+                }
+                else if (iscountered == 1)
+                {
+                    dtCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
+                }
+                else if(iscountered == 2)
+                {
+                    dtMayCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
+                }
+            }
+            dtg1.DataContext = dtCountered;
+            dtg2.DataContext = dtMayCountered;
+            dtg3.DataContext = dtCannotCountered;
+        
+        
         }
     }
     public class TRe
     {
         public int FollowerCnts;
         public int[] SolIndex { get; set; }
-        public List<int> FollowerSelect { get; set; }
+        public List<int> AbbilityPairSelect { get; set; }
         public TRe()
         {
             SolIndex = new int[4];
-            FollowerSelect = new List<int>();
+            AbbilityPairSelect = new List<int>();
         }
         public bool Contains(TRe value)
         {
             //bool Result = false;
-            foreach (int AbbilityPair in value.FollowerSelect)
+            foreach (int AbbilityPair in value.AbbilityPairSelect)
             {
-                if (!this.FollowerSelect.Contains(AbbilityPair))
+                if (!this.AbbilityPairSelect.Contains(AbbilityPair))
                     return false;
             }
             return true;
@@ -313,6 +528,33 @@ namespace FollowerSelect
                 + SolIndex[3].ToString();
         }
     };
+
+    public class TOptedRe
+    {
+        public TRe MissionArrangement;
+        public int CounteredCnt;
+        public int MayFullyCounteredCnt;
+        public int CannotCounteredCnt;
+        public TOptedRe()
+        {
+            MissionArrangement = new TRe();
+            CounteredCnt = 0;
+            MayFullyCounteredCnt = 0;
+            CannotCounteredCnt = 0;
+        }
+        public override string ToString()
+        {
+            return MissionArrangement.FollowerCnts.ToString()+" "+
+                CounteredCnt.ToString() + " " +
+                MayFullyCounteredCnt.ToString() + " " +
+                CannotCounteredCnt.ToString() + "   "
+                + MissionArrangement.SolIndex[0].ToString() + "-"
+                + MissionArrangement.SolIndex[1].ToString() + "-"
+                + MissionArrangement.SolIndex[2].ToString() + "-"
+                + MissionArrangement.SolIndex[3].ToString();
+        }
+
+    }
 
     public class TSolOne
     {
@@ -343,18 +585,22 @@ namespace FollowerSelect
     {
 
         public string Name { set; get; }
+        public int Level { set; get; }
         public int Quality { set; get; }   //2=绿 3=蓝 4=紫
         public int Abbility { set; get; }
-        public TMyFollower(string name, int quality, int abbility)
+        public TMyFollower(string name, int level, int quality, int abbility)
         {
             this.Name = name;
+            this.Level = level;
             this.Quality = quality;
             if (abbility >= 10 && abbility < 100)  //小数字前置
             {
                 int first = abbility / 10;
                 int second = abbility % 10;
-                if (first == 0 || second == 0)
-                    throw new ArgumentOutOfRangeException(this.Name + "技能异常");
+                if (first == 0)
+                    this.Abbility = second;
+                else if (second == 0)
+                    this.Abbility = first;
                 else if (first <= second)
                     this.Abbility = first * 10 + second;
                 else
@@ -362,14 +608,16 @@ namespace FollowerSelect
             }
             else if (abbility >= 100 && abbility < 1000)
             {
-                int first = abbility / 100;
-                int second = abbility / 10 % 10;
-                int third = abbility % 10;
+                int a = abbility / 100;
+                int b = abbility / 10 % 10;
+                int c = abbility % 10;
 
-                if (first == 6||second == 6||third == 6)
+                if (a == 6 || b == 6 || c == 6)
                 {
-                    this.Abbility = Math.Min(Math.Min(first, second),third)*100+
-
+                    int first = Math.Min(Math.Min(a, b), c);
+                    int second = a > b ? (a < c ? a : (b > c ? b : c)) : (b < c ? b : (a > c ? a : c));
+                    int third = Math.Max(Math.Max(a, b), c);
+                    this.Abbility = first * 100 + second * 10 + third;
                 }
                 else
                     throw new ArgumentOutOfRangeException(this.Name + "技能异常");
@@ -380,26 +628,26 @@ namespace FollowerSelect
                 throw new ArgumentOutOfRangeException(this.Name + "技能异常");
 
         }
-        public int Counters(int AbbilityPair)
+        public int Counterable(int AbbilityPair)
         {
             int Result = 0; //0无法全部对应，1可以全部对应，2可能可以全部对应
-            if (Abbility < 10)  //单一技能追随者
+            if (this.Abbility < 10)  //单一技能追随者
             {
                 int first = AbbilityPair / 10;
                 int second = AbbilityPair % 10;
-                if (Abbility == first || Abbility == second)
+                if (this.Abbility == first || this.Abbility == second)
                     Result = 2;
             }
-            else if (Abbility > 10 && Abbility < 100)
+            else if (this.Abbility > 10 && this.Abbility < 100)
             {
-                if (Abbility == AbbilityPair)
+                if (this.Abbility == AbbilityPair)
                     Result = 1;
             }
-            else if (Abbility > 100)
+            else if (this.Abbility > 100)
             {
                 int first = Abbility / 100;
-                int second = Abbility / 10 % 10;
-                int third = Abbility % 10;
+                int second = this.Abbility / 10 % 10;
+                int third = this.Abbility % 10;
                 int A = first * 10 + second;
                 int B = first * 10 + third;
                 int C = second * 10 + third;
@@ -410,6 +658,12 @@ namespace FollowerSelect
             }
             return Result;
         }
+        public override string ToString()
+        {
+            return this.Name + " " + this.Quality.ToString() + " " + this.Abbility.ToString();
+        }
     }
 
 }
+
+
