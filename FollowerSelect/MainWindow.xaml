@@ -32,9 +32,9 @@
                 <Label Content="任务二安排" HorizontalAlignment="Left" Margin="85,0,0,0" VerticalAlignment="Top"/>
                 <Label Content="任务三安排" HorizontalAlignment="Left" Margin="170,0,0,0" VerticalAlignment="Top"/>
                 <Label Content="任务四安排" HorizontalAlignment="Left" Margin="255,0,0,0" VerticalAlignment="Top"/>
-                <RadioButton x:Name="rdb1" Content="总" HorizontalAlignment="Left" Margin="340,5,0,0"  VerticalAlignment="Top" Checked="rdb1_Checked" IsChecked="True"/>
+                <RadioButton x:Name="rdb1" Content="总" HorizontalAlignment="Left" Margin="340,5,0,0"  VerticalAlignment="Top" Checked="rdb1_Checked"/>
                 <RadioButton x:Name="rdb2" Content="已" HorizontalAlignment="Left" Margin="380,5,0,0"  VerticalAlignment="Top" Checked="rdb2_Checked"/>
-                <RadioButton x:Name="rdb3" Content="可" HorizontalAlignment="Left" Margin="420,5,0,0"  VerticalAlignment="Top" Checked="rdb3_Checked"/>
+                <RadioButton x:Name="rdb3" Content="可" HorizontalAlignment="Left" Margin="420,5,0,0"  VerticalAlignment="Top" Checked="rdb3_Checked" IsChecked="True"/>
                 <RadioButton x:Name="rdb4" Content="未" HorizontalAlignment="Left" Margin="460,5,0,0" VerticalAlignment="Top" Checked="rdb4_Checked"/>
                 <ListBox x:Name="lsbOptedRe" HorizontalAlignment="Left" Margin="340,25,0,0"  VerticalAlignment="Top" Height="316" Width="189" ItemsSource="{Binding}" SelectionChanged="lsbOptedRe_SelectionChanged"/>
 

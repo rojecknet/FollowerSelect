@@ -18,8 +18,9 @@ namespace FollowerSelect
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<TMyFollower> myEpicFollowers;
-        public List<TMyFollower> myOtherFollowers;
+        public List<TMyFollower> myFollowers;
+        //public List<TMyFollower> myEpicFollowers;
+        //public List<TMyFollower> myOtherFollowers;
         public List<TOptedRe> OptedResult;
         public Dictionary<int, string> AbbilityDef = new Dictionary<int, string>();
         public bool isMyFollowerReaded = false;
@@ -34,7 +35,7 @@ namespace FollowerSelect
             {
 
                 List<int> Test = new List<int>(new int[] { 1, 2, 3, 4, 5, 6 });
-                List<int>[] Missions ={ new List<int>(new int[] { 1, 2, 3, 6, 7, 9 }),
+                List<int>[] Missions ={ new List<int>(new int[] { 1, 2, 3, 6, 7 }),
                 new List<int>(new int[] { 4, 4, 5, 6, 8, 9 }),
                 new List<int>(new int[] { 1, 1, 3, 5, 7, 8 }),
                 new List<int>(new int[] { 1, 2, 6, 7, 7, 9 }) };
@@ -95,32 +96,57 @@ namespace FollowerSelect
                     }
                 }
                 //所需追随者数量排序
-                List<TRe> SortedFolloers = new List<TRe>();
-                SortedFolloers = InitFollowers.OrderBy(x => x.FollowerCnts).ToList();
+                //List<TRe> SortedFolloers = new List<TRe>();
+                //SortedFolloers = InitFollowers.OrderBy(x => x.FollowerCnts).ToList();
                 //优化结果，去除冗余结果
-                for (int itrStart = 0; itrStart < SortedFolloers.Count; itrStart++)
+                for (int itrStart = 0; itrStart < InitFollowers.Count; itrStart++)
                 {
 
-                    for (int itrEnd = SortedFolloers.Count - 1; itrEnd > itrStart; itrEnd--)
+                    for (int itrEnd = InitFollowers.Count - 1; itrEnd > itrStart; itrEnd--)
                     {
-                        if (SortedFolloers[itrEnd].Contains(SortedFolloers[itrStart]))
-                            SortedFolloers.RemoveAt(itrEnd);
+                        if (InitFollowers[itrEnd].Contains(InitFollowers[itrStart]))
+                            InitFollowers.RemoveAt(itrEnd);
                     }
                 }
                 //lsbRe.DataContext = SortedFolloers;
-                txb.Text = SortedFolloers.Count.ToString();
+                txb.Text = InitFollowers.Count.ToString();
                 MessageBox.Show("任务分组完毕");
                 if (isMyFollowerReaded)
                 {
                     OptedResult = new List<TOptedRe>();
-                    foreach (TRe result in SortedFolloers)
+                    foreach (TRe result in InitFollowers)
                     {
                         TOptedRe optedArrangement = new TOptedRe();
                         optedArrangement.MissionArrangement = result;
                         foreach (int AbbPair in result.AbbilityPairSelect)
                         {
                             int isCountered = 0; //0无法全部对应，1可以全部对应，2可能可以全部对应
-                            foreach (TMyFollower follower in myEpicFollowers) //紫色随从对应
+
+                            foreach (TMyFollower follower in myFollowers)
+                            {
+                                int cntr = follower.Counterable(AbbPair);
+                                if (cntr == 1)
+                                {
+                                    isCountered = 1;
+                                    break;
+                                }
+                                else if (cntr ==2)
+                                {
+                                    isCountered = 2;
+                                    continue;
+                                }
+                                
+                            }
+                            if (isCountered == 0)
+                                optedArrangement.CannotCounteredCnt++;
+                            else if (isCountered == 1)
+                                optedArrangement.CounteredCnt++;
+                            else if (isCountered == 2)
+                                optedArrangement.MayFullyCounteredCnt++;
+
+
+
+                          /*foreach (TMyFollower follower in myEpicFollowers) //紫色随从对应
                             {
                                 isCountered = follower.Counterable(AbbPair);
                                 if (isCountered == 1)
@@ -142,7 +168,7 @@ namespace FollowerSelect
                                 optedArrangement.MayFullyCounteredCnt++;
                                 continue;
                             }
-                            optedArrangement.CannotCounteredCnt++;
+                            optedArrangement.CannotCounteredCnt++;*/
                         }
                         if (optedArrangement.CounteredCnt + optedArrangement.CannotCounteredCnt + optedArrangement.MayFullyCounteredCnt == optedArrangement.MissionArrangement.AbbilityPairSelect.Count)
                             OptedResult.Add(optedArrangement);
@@ -156,15 +182,15 @@ namespace FollowerSelect
                     {
                         OptedResult = OptedResult.OrderBy(x => x.MissionArrangement.FollowerCnts).ToList();
                     }
-                    if (rdb1.IsChecked.Value)  //已
+                    else if (rdb2.IsChecked.Value)  //已
                     {
                         OptedResult = OptedResult.OrderByDescending(x => x.CounteredCnt).ToList();
                     }
-                    if (rdb1.IsChecked.Value)  //可
+                    else if (rdb3.IsChecked.Value)  //可
                     {
                         OptedResult = OptedResult.OrderBy(x => x.MayFullyCounteredCnt).ToList();
                     }
-                    if (rdb1.IsChecked.Value)  //未
+                    else if (rdb4.IsChecked.Value)  //未
                     {
                         OptedResult = OptedResult.OrderBy(x => x.CannotCounteredCnt).ToList();
                     }
@@ -186,21 +212,34 @@ namespace FollowerSelect
         private List<TSolOne> FindSolution(List<int> Mission)
         {
             List<TSolOne> Result = new List<TSolOne>();
-            for (int i = 1; i < 6; i++)
+            for (int i = 1; i < Mission.Count; i++)
             {
                 //if (Mission[i] == Mission[0])
                 //    i++;
+                for (int addCnt = Mission.Count; addCnt < 6; addCnt++)
+                {
+                    Mission.Add(0);
+                }
                 List<int> L4 = new List<int>(Mission);
                 L4.Remove(Mission[0]);
                 L4.Remove(Mission[i]);
-                for (int j = 1; j < 4; j++)
+                for (int j = 1; j < Mission.Count - 2; j++)
                 {
                     //if (L4[j] == L4[0])
                     //    j++;
                     List<int> L2 = new List<int>(L4);
                     L2.Remove(L4[0]);
                     L2.Remove(L4[j]);
-                    TSolOne OneSol = new TSolOne(new int[3] { Mission[0] * 10 + Mission[i], L4[0] * 10 + L4[j], L2[0] * 10 + L2[1] });
+                    int a =  Mission[0] * 10 + Mission[i];
+                    if (a % 10 == 0)
+                        a = a / 10;
+                    int b = L4[0] * 10 + L4[j];
+                    if (b % 10 == 0)
+                        b = b / 10;
+                    int c = L2[0] * 10 + L2[1];
+                    if (c % 10 == 0)
+                        c= c / 10;
+                    TSolOne OneSol = new TSolOne(new int[3] { a, b, c });
                     Result.Add(OneSol);
                 }
             }
@@ -291,14 +330,15 @@ namespace FollowerSelect
                 {
                     DataTable dt = OpenCSV(openFileDialog.FileName);
                     dtgMy.DataContext = dt;
-                    myEpicFollowers = new List<TMyFollower>();
-                    myOtherFollowers = new List<TMyFollower>();
+                    myFollowers = new List<TMyFollower>();
+                    //myEpicFollowers = new List<TMyFollower>();
+                    //myOtherFollowers = new List<TMyFollower>();
                     foreach (DataRow row in dt.Rows)
                     {
 
                         //MessageBox.Show(row.ItemArray[6].ToString());
-                        if (int.Parse(row.ItemArray[2].ToString()) == 4) //紫色追随者
-                        {
+                        //if (int.Parse(row.ItemArray[2].ToString()) == 4) //紫色追随者
+                        //{
                             int abb1 = FindAbbility(row.ItemArray[6].ToString());
                             int abb2 = FindAbbility(row.ItemArray[7].ToString());
                             int abb = abb1 * 10 + abb2;
@@ -309,15 +349,15 @@ namespace FollowerSelect
                                  int abb3 = 6;
                                  //(abb1<abb2？abb1:abb2)
                              }*/
-                            TMyFollower epicfollower = new TMyFollower(row.ItemArray[0].ToString(), int.Parse(row.ItemArray[3].ToString()), 4, abb);
-                            myEpicFollowers.Add(epicfollower);
-                        }
-                        else if (int.Parse(row.ItemArray[2].ToString()) == 2 || int.Parse(row.ItemArray[2].ToString()) == 3)
+                            TMyFollower epicfollower = new TMyFollower(row.ItemArray[0].ToString(), int.Parse(row.ItemArray[3].ToString()), int.Parse(row.ItemArray[2].ToString()), abb);
+                            myFollowers.Add(epicfollower);
+                        //}
+                        /*else if (int.Parse(row.ItemArray[2].ToString()) == 2 || int.Parse(row.ItemArray[2].ToString()) == 3)
                         {
                             int abb1 = FindAbbility(row.ItemArray[6].ToString());
                             TMyFollower otherfollower = new TMyFollower(row.ItemArray[0].ToString(), int.Parse(row.ItemArray[3].ToString()), int.Parse(row.ItemArray[2].ToString()), abb1);
                             myOtherFollowers.Add(otherfollower);
-                        }
+                        }*/
                     }
                     isMyFollowerReaded = true;
                     btn1.Content = "点我";
@@ -458,18 +498,18 @@ namespace FollowerSelect
             {
                 int iscountered = 0;//0无法全部对应，1可以全部对应，2可能可以全部对应
                 string followersName = "";
-                foreach(TMyFollower epicFollower in myEpicFollowers)
+                foreach(TMyFollower Follower in myFollowers)
                 {
                     //iscountered = epicFollower.Counterable(abb);
-                    if (epicFollower.Counterable(abb) == 1)
+                    if (Follower.Counterable(abb) == 1)
                     {
-                        followersName += epicFollower.Name + "：";
+                        followersName += Follower.Name + "：";
                         iscountered = 1;
                     }
                 }
                 if(iscountered != 1)
                 {
-                    foreach(TMyFollower otherFollower in myOtherFollowers)
+                    foreach (TMyFollower otherFollower in myFollowers)
                     {
                         if(otherFollower.Counterable(abb) == 2)
                         {
@@ -548,10 +588,10 @@ namespace FollowerSelect
                 CounteredCnt.ToString() + " " +
                 MayFullyCounteredCnt.ToString() + " " +
                 CannotCounteredCnt.ToString() + "   "
-                + MissionArrangement.SolIndex[0].ToString() + "-"
-                + MissionArrangement.SolIndex[1].ToString() + "-"
-                + MissionArrangement.SolIndex[2].ToString() + "-"
-                + MissionArrangement.SolIndex[3].ToString();
+                + (MissionArrangement.SolIndex[0]+1).ToString() + "-"
+                + (MissionArrangement.SolIndex[1]+1).ToString() + "-"
+                + (MissionArrangement.SolIndex[2]+1).ToString() + "-"
+                + (MissionArrangement.SolIndex[3]+1).ToString();
         }
 
     }
@@ -633,15 +673,28 @@ namespace FollowerSelect
             int Result = 0; //0无法全部对应，1可以全部对应，2可能可以全部对应
             if (this.Abbility < 10)  //单一技能追随者
             {
-                int first = AbbilityPair / 10;
-                int second = AbbilityPair % 10;
-                if (this.Abbility == first || this.Abbility == second)
-                    Result = 2;
+                if (AbbilityPair > 10)
+                {
+                    int first = AbbilityPair / 10;
+                    int second = AbbilityPair % 10;
+                    if (this.Abbility == first || this.Abbility == second)
+                        Result = 2;
+                }
+                if (AbbilityPair == this.Abbility)
+                        Result = 1;
+
             }
             else if (this.Abbility > 10 && this.Abbility < 100)
             {
                 if (this.Abbility == AbbilityPair)
                     Result = 1;
+                if(AbbilityPair < 10)
+                {
+                    int first = this.Abbility / 10;
+                    int second = this.Abbility % 10;
+                    if (first == AbbilityPair || second == AbbilityPair)
+                        Result = 1;
+                }
             }
             else if (this.Abbility > 100)
             {
