@@ -31,11 +31,11 @@ namespace FollowerSelect
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            try
+           // try
             {
 
                 List<int> Test = new List<int>(new int[] { 1, 2, 3, 4, 5, 6 });
-                List<int>[] Missions ={ new List<int>(new int[] { 1, 2, 3, 6, 7 }),
+                List<int>[] Missions ={ new List<int>(new int[] { 1, 2, 3, 6 }),
                 new List<int>(new int[] { 4, 4, 5, 6, 8, 9 }),
                 new List<int>(new int[] { 1, 1, 3, 5, 7, 8 }),
                 new List<int>(new int[] { 1, 2, 6, 7, 7, 9 }) };
@@ -48,53 +48,58 @@ namespace FollowerSelect
                     Solutions.Add(FindSolution(Missions[missionCount]));
                     lsbNow.DataContext = Solutions[missionCount];
                 }
-
-                for (int index0 = 0; index0 < Solutions[0].Count; index0++)
+                //for (int MissCnt = 0; MissCnt < Solutions.Count;MissCnt++ )
                 {
-                    for (int index1 = 0; index1 < Solutions[1].Count; index1++)
-                    {
 
-                        for (int index2 = 0; index2 < Solutions[2].Count; index2++)
+                }
+
+                //Missions.sel
+                    for (int index0 = 0; index0 < Solutions[0].Count; index0++)
+                    {
+                        for (int index1 = 0; index1 < Solutions[1].Count; index1++)
                         {
-                            for (int index3 = 0; index3 < Solutions[3].Count; index3++)
+
+                            for (int index2 = 0; index2 < Solutions[2].Count; index2++)
                             {
-                                CurrArrangement = new List<int>();
-                                if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[0]))
-                                    CurrArrangement.Add(Solutions[0][index0].SolPair[0]);
-                                if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[1]))
-                                    CurrArrangement.Add(Solutions[0][index0].SolPair[1]);
-                                if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[2]))
-                                    CurrArrangement.Add(Solutions[0][index0].SolPair[2]);
-                                if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[0]))
-                                    CurrArrangement.Add(Solutions[1][index1].SolPair[0]);
-                                if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[1]))
-                                    CurrArrangement.Add(Solutions[1][index1].SolPair[1]);
-                                if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[2]))
-                                    CurrArrangement.Add(Solutions[1][index1].SolPair[2]);
-                                if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[0]))
-                                    CurrArrangement.Add(Solutions[2][index2].SolPair[0]);
-                                if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[1]))
-                                    CurrArrangement.Add(Solutions[2][index2].SolPair[1]);
-                                if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[2]))
-                                    CurrArrangement.Add(Solutions[2][index2].SolPair[2]);
-                                if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[0]))
-                                    CurrArrangement.Add(Solutions[3][index3].SolPair[0]);
-                                if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[1]))
-                                    CurrArrangement.Add(Solutions[3][index3].SolPair[1]);
-                                if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[2]))
-                                    CurrArrangement.Add(Solutions[3][index3].SolPair[2]);
-                                TRe AbbilityArrangement = new TRe();
-                                AbbilityArrangement.FollowerCnts = CurrArrangement.Count;
-                                AbbilityArrangement.SolIndex[0] = index0;
-                                AbbilityArrangement.SolIndex[1] = index1;
-                                AbbilityArrangement.SolIndex[2] = index2;
-                                AbbilityArrangement.SolIndex[3] = index3;
-                                AbbilityArrangement.AbbilityPairSelect = CurrArrangement;
-                                InitFollowers.Add(AbbilityArrangement);
+                                for (int index3 = 0; index3 < Solutions[3].Count; index3++)
+                                {
+                                    CurrArrangement = new List<int>();
+                                    if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[0]))
+                                        CurrArrangement.Add(Solutions[0][index0].SolPair[0]);
+                                    if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[1]))
+                                        CurrArrangement.Add(Solutions[0][index0].SolPair[1]);
+                                    if (!CurrArrangement.Contains(Solutions[0][index0].SolPair[2]))
+                                        CurrArrangement.Add(Solutions[0][index0].SolPair[2]);
+                                    if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[0]))
+                                        CurrArrangement.Add(Solutions[1][index1].SolPair[0]);
+                                    if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[1]))
+                                        CurrArrangement.Add(Solutions[1][index1].SolPair[1]);
+                                    if (!CurrArrangement.Contains(Solutions[1][index1].SolPair[2]))
+                                        CurrArrangement.Add(Solutions[1][index1].SolPair[2]);
+                                    if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[0]))
+                                        CurrArrangement.Add(Solutions[2][index2].SolPair[0]);
+                                    if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[1]))
+                                        CurrArrangement.Add(Solutions[2][index2].SolPair[1]);
+                                    if (!CurrArrangement.Contains(Solutions[2][index2].SolPair[2]))
+                                        CurrArrangement.Add(Solutions[2][index2].SolPair[2]);
+                                    if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[0]))
+                                        CurrArrangement.Add(Solutions[3][index3].SolPair[0]);
+                                    if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[1]))
+                                        CurrArrangement.Add(Solutions[3][index3].SolPair[1]);
+                                    if (!CurrArrangement.Contains(Solutions[3][index3].SolPair[2]))
+                                        CurrArrangement.Add(Solutions[3][index3].SolPair[2]);
+                                    TRe AbbilityArrangement = new TRe();
+                                    AbbilityArrangement.FollowerCnts = CurrArrangement.Count;
+                                    AbbilityArrangement.SolIndex[0] = index0;
+                                    AbbilityArrangement.SolIndex[1] = index1;
+                                    AbbilityArrangement.SolIndex[2] = index2;
+                                    AbbilityArrangement.SolIndex[3] = index3;
+                                    AbbilityArrangement.AbbilityPairSelect = CurrArrangement;
+                                    InitFollowers.Add(AbbilityArrangement);
+                                }
                             }
                         }
                     }
-                }
                 //所需追随者数量排序
                 //List<TRe> SortedFolloers = new List<TRe>();
                 //SortedFolloers = InitFollowers.OrderBy(x => x.FollowerCnts).ToList();
@@ -199,9 +204,9 @@ namespace FollowerSelect
                 }
 
             }
-            catch(Exception ex)
+            //catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+            //    MessageBox.Show(ex.Message);
             }
         }
 
@@ -227,19 +232,25 @@ namespace FollowerSelect
                 {
                     //if (L4[j] == L4[0])
                     //    j++;
+                     TSolOne OneSol = new TSolOne();
                     List<int> L2 = new List<int>(L4);
                     L2.Remove(L4[0]);
                     L2.Remove(L4[j]);
                     int a =  Mission[0] * 10 + Mission[i];
                     if (a % 10 == 0)
                         a = a / 10;
+                    if (a != 0)
+                        OneSol.SolPair.Add(a);
                     int b = L4[0] * 10 + L4[j];
                     if (b % 10 == 0)
                         b = b / 10;
+                    if (b != 0)
+                        OneSol.SolPair.Add(b);
                     int c = L2[0] * 10 + L2[1];
                     if (c % 10 == 0)
                         c= c / 10;
-                    TSolOne OneSol = new TSolOne(new int[3] { a, b, c });
+                    if (c != 0)
+                        OneSol.SolPair.Add(c);
                     Result.Add(OneSol);
                 }
             }
@@ -252,9 +263,17 @@ namespace FollowerSelect
                         Result.RemoveAt(j);
                 }
             }
-
-
             return Result;
+        }
+
+        //
+        public List<List<int>> FindResult(List<List<TSolOne>> Solutions, int itrSol, List<int> SolIndex)
+        {
+            foreach(TSolOne SolOne in Solutions[itrSol])
+            {
+
+
+            }
         }
 
         /// 将CSV文件的数据读取到DataTable中
@@ -598,26 +617,43 @@ namespace FollowerSelect
 
     public class TSolOne
     {
-        public int[] SolPair { set; get; }
+        //public int[] SolPair { set; get; }
+        public List<int> SolPair { set; get; }
         public TSolOne()
         {
-            SolPair = new int[3];
+            SolPair = new List<int>();
         }
         public TSolOne(int[] Array)
         {
-            SolPair = new int[3];
-            SolPair[0] = Array[0];
-            SolPair[1] = Array[1];
-            SolPair[2] = Array[2];
+            SolPair = new List<int>();
+            foreach (int arr in Array)
+                SolPair.Add(arr);           
         }
         public bool Equals(TSolOne SolOne)
         {
-            if (SolOne.SolPair.Contains(this.SolPair[0]) &&
+            //bool isEqual = false;
+            foreach(int arr in SolOne.SolPair)
+            {
+                if (!this.SolPair.Contains(arr))
+                    return false;
+            }
+            return true;
+            /*if (SolOne.SolPair.Contains(this.SolPair[0]) &&
                 SolOne.SolPair.Contains(this.SolPair[1]) &&
                 SolOne.SolPair.Contains(this.SolPair[2]))
                 return true;
             else
                 return false;
+            */
+        }
+
+        public override string ToString()
+        {
+            string result="";
+            foreach (int arr in this.SolPair)
+                result += arr.ToString() + "-";
+            result = result.Remove(result.LastIndexOf("-"));
+            return result;
         }
     };
 

@@ -24,10 +24,10 @@
         <GroupBox Header="结论" HorizontalAlignment="Left" Margin="206,183,0,0" VerticalAlignment="Top" Height="400" Width="541">
 
             <Grid>
-                <ListBox x:Name="lsbMission1" HorizontalAlignment="Left" Height="353" Margin="0,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
-                <ListBox x:Name="lsbMission2" HorizontalAlignment="Left" Height="353" Margin="85,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
-                <ListBox x:Name="lsbMission3" HorizontalAlignment="Left" Height="353" Margin="170,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
-                <ListBox x:Name="lsbMission4" HorizontalAlignment="Left" Height="353" Margin="255,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}" ItemTemplate="{StaticResource ArrayTemplate}"/>
+                <ListBox x:Name="lsbMission1" HorizontalAlignment="Left" Height="353" Margin="0,25,0,0"   VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission2" HorizontalAlignment="Left" Height="353" Margin="85,25,0,0"  VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission3" HorizontalAlignment="Left" Height="353" Margin="170,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission4" HorizontalAlignment="Left" Height="353" Margin="255,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
                 <Label Content="任务一安排" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
                 <Label Content="任务二安排" HorizontalAlignment="Left" Margin="85,0,0,0" VerticalAlignment="Top"/>
                 <Label Content="任务三安排" HorizontalAlignment="Left" Margin="170,0,0,0" VerticalAlignment="Top"/>
