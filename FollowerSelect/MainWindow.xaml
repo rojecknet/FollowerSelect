@@ -15,21 +15,30 @@
 
     </Window.Resources>
     <Grid>
-        <GroupBox Header="任务" HorizontalAlignment="Left" Margin="206,0,0,0" VerticalAlignment="Top" Height="183" Width="541">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="62*"/>
+            <RowDefinition Height="135*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="205*"/>
+            <ColumnDefinition Width="546*"/>
+            <ColumnDefinition Width="369*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="任务" Margin="0,0,0,0" Grid.Column="1" Grid.Row="0">
             <Grid>
                 <DataGrid x:Name="dtgMission" Margin="0,24,0,0" IsReadOnly="True" ItemsSource="{Binding}">
                 </DataGrid>
                 <Label Content="目标任务选择" HorizontalAlignment="Left" Margin="0,-1,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="cbbMission" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Top" Width="211" SelectionChanged="cbbMission_SelectionChanged"/>
+                <ComboBox x:Name="cbbMission" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Top" Width="211" SelectionChanged="cbbMission_SelectionChanged" SelectedIndex="0"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="结论" HorizontalAlignment="Left" Margin="206,183,0,0" VerticalAlignment="Top" Height="400" Width="541">
+        <GroupBox Header="结论" Margin="0,0,0,0" Grid.Column="1" Grid.Row="1">
 
             <Grid>
-                <ListBox x:Name="lsbMission1" HorizontalAlignment="Left" Height="353" Margin="0,25,0,0"   VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
-                <ListBox x:Name="lsbMission2" HorizontalAlignment="Left" Height="353" Margin="85,25,0,0"  VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
-                <ListBox x:Name="lsbMission3" HorizontalAlignment="Left" Height="353" Margin="170,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
-                <ListBox x:Name="lsbMission4" HorizontalAlignment="Left" Height="353" Margin="255,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission1" HorizontalAlignment="Left" Height="132" Margin="0,25,0,0"   VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission2" HorizontalAlignment="Left" Height="132" Margin="85,25,0,0"  VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission3" HorizontalAlignment="Left" Height="132" Margin="170,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
+                <ListBox x:Name="lsbMission4" HorizontalAlignment="Left" Height="132" Margin="255,25,0,0" VerticalAlignment="Top" Width="80" ItemsSource="{Binding}"/>
                 <Label Content="任务一安排" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top"/>
                 <Label Content="任务二安排" HorizontalAlignment="Left" Margin="85,0,0,0" VerticalAlignment="Top"/>
                 <Label Content="任务三安排" HorizontalAlignment="Left" Margin="170,0,0,0" VerticalAlignment="Top"/>
@@ -38,14 +47,16 @@
                 <RadioButton x:Name="rdb2" Content="已" HorizontalAlignment="Left" Margin="380,5,0,0"  VerticalAlignment="Top" Checked="rdb2_Checked"/>
                 <RadioButton x:Name="rdb3" Content="可" HorizontalAlignment="Left" Margin="420,5,0,0"  VerticalAlignment="Top" Checked="rdb3_Checked" IsChecked="True"/>
                 <RadioButton x:Name="rdb4" Content="未" HorizontalAlignment="Left" Margin="460,5,0,0" VerticalAlignment="Top" Checked="rdb4_Checked"/>
-                <ListBox x:Name="lsbOptedRe" HorizontalAlignment="Left" Margin="340,25,0,0"  VerticalAlignment="Top" Height="316" Width="189" ItemsSource="{Binding}" SelectionChanged="lsbOptedRe_SelectionChanged"/>
+                <ListBox x:Name="lsbOptedRe" HorizontalAlignment="Left" Margin="340,25,0,0"  VerticalAlignment="Top" Height="310" Width="189" ItemsSource="{Binding}" SelectionChanged="lsbOptedRe_SelectionChanged"/>
+                <ComboBox x:Name="cbbArrange" HorizontalAlignment="Left" Margin="0,162,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbbArrange_SelectionChanged"/>
+                <ListBox x:Name="lsbArrange" HorizontalAlignment="Left" Height="185" Margin="0,183,0,0" VerticalAlignment="Top" Width="335"/>
 
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="我的追随者" HorizontalAlignment="Left" Height="583" VerticalAlignment="Top" Width="206">
+        <GroupBox Header="我的追随者" Grid.Column="0" Grid.RowSpan="2">
             <Grid>
-                <DataGrid x:Name="dtgMy" HorizontalAlignment="Left" Margin="0,0,0,39" Width="194" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid x:Name="dtgMy" Margin="0,0,0,39" ItemsSource="{Binding}" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="60" Header="名字" Binding="{Binding 姓名}"/>
                         <DataGridTextColumn Width="60" Header="技能一" Binding="{Binding 技能1}"/>
@@ -55,7 +66,7 @@
                 <Button Content="读取" HorizontalAlignment="Right" Width="84" Click="Button_Click_1" Height="34" VerticalAlignment="Bottom"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="选择建议" HorizontalAlignment="Left" Height="583" Margin="752,0,0,0" VerticalAlignment="Top" Width="354">
+        <GroupBox Header="选择建议" Margin="0,0,0,0" Grid.Column="2" Grid.RowSpan="2">
             <Grid>
 
                 <DataGrid x:Name="dtg1" Margin="0,25,0,0"  VerticalAlignment="Top" Height="188" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False">
@@ -76,7 +87,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid x:Name="dtg2" HorizontalAlignment="Left" Margin="0,238,0,0" VerticalAlignment="Top" Height="194" Width="342" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False">
+                <DataGrid x:Name="dtg2" Margin="0,238,0,0" VerticalAlignment="Top" Height="194" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="110" Header="技能组合" Binding="{Binding 技能组合}">
                             <DataGridTextColumn.ElementStyle>
@@ -96,7 +107,7 @@
 
                 </DataGrid>
 
-                <DataGrid x:Name="dtg3" HorizontalAlignment="Left" Margin="0,457,0,0" VerticalAlignment="Top" Height="104" Width="342" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False">
+                <DataGrid x:Name="dtg3" Margin="0,457,0,0" Height="104" ItemsSource="{Binding}" IsReadOnly="True" AutoGenerateColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" VerticalAlignment="Top">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="110" Header="技能组合" Binding="{Binding 技能组合}">
                             <DataGridTextColumn.ElementStyle>
@@ -124,7 +135,7 @@
 
 
 
-        <Button x:Name="btn1" Content="未读取" HorizontalAlignment="Left" Margin="657,543,0,0" VerticalAlignment="Top" Width="84" Height="34" Click="Button_Click" IsEnabled="False"/>
-        <TextBox x:Name="txb" HorizontalAlignment="Left" Height="22" Margin="553,555,0,0" TextWrapping="Wrap" Text="分组数" VerticalAlignment="Top" Width="99"/>
+        <Button x:Name="btn1" Content="未读取" HorizontalAlignment="Left" Margin="452,357,0,0" VerticalAlignment="Top" Width="84" Height="34" Click="Button_Click" IsEnabled="False" Grid.Column="1" Grid.Row="1"/>
+        <TextBox x:Name="txb" HorizontalAlignment="Left" Height="22" Margin="348,369,0,0" TextWrapping="Wrap" Text="分组数" VerticalAlignment="Top" Width="99" Grid.Column="1" Grid.Row="1"/>
     </Grid>
 </Window>

@@ -21,14 +21,25 @@ namespace FollowerSelect
     {
         public List<TMyFollower> myFollowers;
         public List<TOptedRe> OptedResult;
-        public Dictionary<int, string> AbbilityDef = new Dictionary<int, string>();
+        public static Dictionary<int, string> AbbilityDef = new Dictionary<int, string>();
         public bool isMyFollowerReaded = false;
 
         TMission MissionHighMual;
         TMission MisssionElementalRune;
+        TMission Mission645;
         public MainWindow()
         {
             InitializeComponent();
+            AbbilityDef.Add(0, "");
+            AbbilityDef.Add(1, "限时战斗");
+            AbbilityDef.Add(2, "强力法术");
+            AbbilityDef.Add(3, "重击");
+            AbbilityDef.Add(4, "群体伤害");
+            AbbilityDef.Add(5, "爪牙围攻");
+            AbbilityDef.Add(6, "危险区域");
+            AbbilityDef.Add(7, "致命爪牙");
+            AbbilityDef.Add(8, "魔法减益");
+            AbbilityDef.Add(9, "野生怪物入侵");
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -44,16 +55,19 @@ namespace FollowerSelect
 
                 List<List<int>> Missions = GetMissions(cbbMission.SelectedItem as TMission);
 
-                List<List<TSolOne>> Solutions = new List<List<TSolOne>>();
+                List<TArrangement> Solutions = new List<TArrangement>();
 
 
                 List<TRe> InitFollowers = new List<TRe>();
-                for (int missionCount = 0; missionCount < 4; missionCount++)
+                for (int missionCount = 0; missionCount < Missions.Count; missionCount++)
                 {
                     ListBox lsbNow = this.FindName("lsbMission" + (missionCount + 1).ToString()) as ListBox;
-                    Solutions.Add(FindSolution(Missions[missionCount]));
-                    lsbNow.DataContext = Solutions[missionCount];
+                    TArrangement oneArrange = new TArrangement("任务" + (missionCount + 1).ToString());
+                    oneArrange.Arrangement = FindSolution(Missions[missionCount]);
+                    Solutions.Add(oneArrange);
+                    //lsbNow.DataContext = Solutions[missionCount];
                 }
+                cbbArrange.ItemsSource = Solutions;
                 FindResult(Solutions, InitFollowers);
 
                 //所需追随者数量排序
@@ -196,15 +210,15 @@ namespace FollowerSelect
         }
 
 
-        public void FindResult(List<List<TSolOne>> Solutions, List<TRe> InitFollowers)
+        public void FindResult(List<TArrangement> Solutions, List<TRe> InitFollowers)
         {
             FindResultRec(Solutions, 0, new List<int>(), InitFollowers);
         }
 
         //查找所有任务分组的可能组合递归函数
-        public void FindResultRec(List<List<TSolOne>> Solutions, int itrSol, List<int> SolIndex, List<TRe> InitFollowers)
+        public void FindResultRec(List<TArrangement> Solutions, int itrSol, List<int> SolIndex, List<TRe> InitFollowers)
         {
-            for (int i = 0; i < Solutions[itrSol].Count; i++)
+            for (int i = 0; i < Solutions[itrSol].Arrangement.Count; i++)
             {
                 SolIndex.Add(i);  //SolIndex数组维护每层递归中，技能分组的序列值。
                 if (itrSol < Solutions.Count - 1)
@@ -217,7 +231,7 @@ namespace FollowerSelect
                     //List<int> AbbArrangement = new List<int>();
                     for (int indexCnt = 0; indexCnt < SolIndex.Count; indexCnt++)
                     {
-                        foreach (int abb in Solutions[indexCnt][SolIndex[indexCnt]].SolPair)
+                        foreach (int abb in Solutions[indexCnt].Arrangement[SolIndex[indexCnt]].SolPair)
                         {
                             if (!Re.AbbilityPairSelect.Contains(abb))
                                 Re.AbbilityPairSelect.Add(abb);
@@ -226,7 +240,8 @@ namespace FollowerSelect
 
                     }
                     Re.FollowerCnts = Re.AbbilityPairSelect.Count;
-                    InitFollowers.Add(Re);
+                    if (Re.FollowerCnts<12)
+                     InitFollowers.Add(Re);
 
                     //Re.SolIndex = SolIndex;
                 }
@@ -366,7 +381,7 @@ namespace FollowerSelect
             return -1;
         }
 
-        private string GetAbbName(int abb)
+        public static string GetAbbName(int abb)
         {
             string AbbName = "";
             if (abb > 0 && abb < 10)
@@ -412,16 +427,7 @@ namespace FollowerSelect
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            AbbilityDef.Add(0, "");
-            AbbilityDef.Add(1, "限时战斗");
-            AbbilityDef.Add(2, "强力法术");
-            AbbilityDef.Add(3, "重击");
-            AbbilityDef.Add(4, "群体伤害");
-            AbbilityDef.Add(5, "爪牙围攻");
-            AbbilityDef.Add(6, "危险区域");
-            AbbilityDef.Add(7, "致命爪牙");
-            AbbilityDef.Add(8, "魔法减益");
-            AbbilityDef.Add(9, "野生怪物入侵");
+
             ObservableCollection<TMission> Missions = new ObservableCollection<TMission>();
             MissionHighMual = new TMission("悬垂堡(645)");
             MissionHighMual.dtMission.Rows.Add(new string[] { "一", "1", "1", "1", "", "", "1", "1", "", "1" });
@@ -438,6 +444,17 @@ namespace FollowerSelect
             MisssionElementalRune.dtMission.Rows.Add(new string[] { "五", "", "", "2", "2", "1", "", "1", "", "" });
             MisssionElementalRune.dtMission.Rows.Add(new string[] { "六", "", "1", "1", "", "1", "1", "", "1", "1" });
             Missions.Add(MisssionElementalRune);
+
+            Mission645 = new TMission("645装备任务(630)");
+            Mission645.dtMission.Rows.Add(new string[] { "一", "", "1", "1", "", "", "", "1", "", "1" });
+            Mission645.dtMission.Rows.Add(new string[] { "二", "1", "1", "", "", "", "", "2", "", "" });
+            Mission645.dtMission.Rows.Add(new string[] { "三", "1", "", "1", "", "", "1", "", "", "1" });
+            Mission645.dtMission.Rows.Add(new string[] { "四", "1", "2", "", "", "", "", "", "1", "" });
+            Mission645.dtMission.Rows.Add(new string[] { "五", "", "1", "", "", "1", "", "1", "", "1" });
+            Mission645.dtMission.Rows.Add(new string[] { "六", "2", "", "1", "", "", "1", "", "", "" });
+            Mission645.dtMission.Rows.Add(new string[] { "七", "1", "", "", "1", "", "1", "", "", "1" });
+            Missions.Add(Mission645);
+
 
             cbbMission.ItemsSource = Missions;
 
@@ -549,6 +566,11 @@ namespace FollowerSelect
         {
             dtgMission.DataContext = (cbbMission.SelectedItem as TMission).dtMission;
         }
+
+        private void cbbArrange_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            lsbArrange.ItemsSource = (cbbArrange.SelectedItem as TArrangement).Arrangement;
+        }
     }
     public class TRe
     {
@@ -642,8 +664,8 @@ namespace FollowerSelect
         {
             string result = "";
             foreach (int arr in this.SolPair)
-                result += arr.ToString() + "-";
-            result = result.Remove(result.LastIndexOf("-"));
+                result +=  MainWindow.GetAbbName(arr) + " |||| ";
+            result = result.Remove(result.LastIndexOf(" |||| "));
             return result;
         }
     };
@@ -769,6 +791,20 @@ namespace FollowerSelect
         }
     }
 
+    public class TArrangement
+    {
+        public List<TSolOne> Arrangement { get; set; }
+        public string Name { get; set; }
+        public TArrangement(string name)
+        {
+            this.Name = name;
+            Arrangement = new List<TSolOne>();
+        }
+        public override string ToString()
+        {
+            return this.Name;
+        }
+    }
 }
 
 
