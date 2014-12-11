@@ -20,7 +20,7 @@
                 <DataGrid x:Name="dtgMission" Margin="0,24,0,0" IsReadOnly="True" ItemsSource="{Binding}">
                 </DataGrid>
                 <Label Content="目标任务选择" HorizontalAlignment="Left" Margin="0,-1,0,0" VerticalAlignment="Top"/>
-                <ComboBox HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Top" Width="211"/>
+                <ComboBox x:Name="cbbMission" HorizontalAlignment="Left" Margin="87,0,0,0" VerticalAlignment="Top" Width="211" SelectionChanged="cbbMission_SelectionChanged"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="结论" HorizontalAlignment="Left" Margin="206,183,0,0" VerticalAlignment="Top" Height="400" Width="541">

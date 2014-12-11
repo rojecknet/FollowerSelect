@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace FollowerSelect
         public Dictionary<int, string> AbbilityDef = new Dictionary<int, string>();
         public bool isMyFollowerReaded = false;
 
-        DataTable MissionHighMual = new DataTable();
+        TMission MissionHighMual;
+        TMission MisssionElementalRune;
         public MainWindow()
         {
             InitializeComponent();
@@ -40,7 +42,7 @@ namespace FollowerSelect
                 new List<int>(new int[] { 1, 2, 6, 7, 7, 9 }) };*/
 
 
-                List<List<int>> Missions = GetMissions(MissionHighMual);
+                List<List<int>> Missions = GetMissions(cbbMission.SelectedItem as TMission);
 
                 List<List<TSolOne>> Solutions = new List<List<TSolOne>>();
 
@@ -385,10 +387,10 @@ namespace FollowerSelect
             return AbbName;
         }
 
-        private List<List<int>> GetMissions(DataTable MissTable)
+        private List<List<int>> GetMissions(TMission MissTable)
         {
             List<List<int>> Missions = new List<List<int>>();
-            foreach(DataRow row in MissTable.Rows)
+            foreach(DataRow row in MissTable.dtMission.Rows)
             {
                 List<int> OneMission = new List<int>();
                 for (int col = 1; col < row.ItemArray.Count(); col++)
@@ -420,23 +422,26 @@ namespace FollowerSelect
             AbbilityDef.Add(7, "致命爪牙");
             AbbilityDef.Add(8, "魔法减益");
             AbbilityDef.Add(9, "野生怪物入侵");
-            MissionHighMual = new DataTable();
-            MissionHighMual.Columns.Add("任务");
-            MissionHighMual.Columns.Add("限时战斗");
-            MissionHighMual.Columns.Add("强力法术");
-            MissionHighMual.Columns.Add("重击");
-            MissionHighMual.Columns.Add("群体伤害");
-            MissionHighMual.Columns.Add("爪牙围攻");
-            MissionHighMual.Columns.Add("危险区域");
-            MissionHighMual.Columns.Add("致命爪牙");
-            MissionHighMual.Columns.Add("魔法减益");
-            MissionHighMual.Columns.Add("野生怪物入侵");
+            ObservableCollection<TMission> Missions = new ObservableCollection<TMission>();
+            MissionHighMual = new TMission("悬垂堡(645)");
+            MissionHighMual.dtMission.Rows.Add(new string[] { "一", "1", "1", "1", "", "", "1", "1", "", "1" });
+            MissionHighMual.dtMission.Rows.Add(new string[] { "二", "", "", "", "2", "1", "1", "", "1", "1" });
+            MissionHighMual.dtMission.Rows.Add(new string[] { "三", "2", "", "1", "", "1", "", "1", "1", "" });
+            MissionHighMual.dtMission.Rows.Add(new string[] { "四", "1", "1", "", "", "", "1", "2", "", "1" });
+            Missions.Add(MissionHighMual);
 
-            MissionHighMual.Rows.Add(new string[] { "一", "1", "1", "1", "", "", "1", "1", "", "1" });
-            MissionHighMual.Rows.Add(new string[] { "二", "", "", "", "2", "1", "1", "", "1", "1" });
-            MissionHighMual.Rows.Add(new string[] { "三", "2", "", "1", "", "1", "", "1", "1", "" });
-            MissionHighMual.Rows.Add(new string[] { "四", "1", "1", "", "", "", "1", "2", "", "1" });
-            dtgMission.DataContext = MissionHighMual;
+            MisssionElementalRune = new TMission("元素符文(戒指任务)");
+            MisssionElementalRune.dtMission.Rows.Add(new string[] {"一", "1", "", "1", "1", "1", "1", "", "", "1"});
+            MisssionElementalRune.dtMission.Rows.Add(new string[] { "二", "", "", "1", "1", "", "1", "2", "", "" });
+            MisssionElementalRune.dtMission.Rows.Add(new string[] { "三", "", "1", "1", "1", "", "", "1", "1", "" });
+            MisssionElementalRune.dtMission.Rows.Add(new string[] { "四", "", "1", "1", "2", "", "1", "1", "", "" });
+            MisssionElementalRune.dtMission.Rows.Add(new string[] { "五", "", "", "2", "2", "1", "", "1", "", "" });
+            MisssionElementalRune.dtMission.Rows.Add(new string[] { "六", "", "1", "1", "", "1", "1", "", "1", "1" });
+            Missions.Add(MisssionElementalRune);
+
+            cbbMission.ItemsSource = Missions;
+
+            //dtgMission.DataContext = MissionHighMual;
         }
 
         private void rdb1_Checked(object sender, RoutedEventArgs e)
@@ -479,63 +484,70 @@ namespace FollowerSelect
         private void lsbOptedRe_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TOptedRe selRe = lsbOptedRe.SelectedItem as TOptedRe;
-            lsbMission1.SelectedIndex = selRe.SolIndex[0];
-            lsbMission2.SelectedIndex = selRe.SolIndex[1];
-            lsbMission3.SelectedIndex = selRe.SolIndex[2];
-            lsbMission4.SelectedIndex = selRe.SolIndex[3];
-            DataTable dtCountered = new DataTable();
-            dtCountered.Columns.Add("技能组合");
-            dtCountered.Columns.Add("应对追随者");
-            DataTable dtMayCountered = new DataTable();
-            dtMayCountered.Columns.Add("技能组合");
-            dtMayCountered.Columns.Add("应对追随者");
-            DataTable dtCannotCountered = new DataTable();
-            dtCannotCountered.Columns.Add("技能组合");
-            dtCannotCountered.Columns.Add("应对追随者");
-
-            foreach (int abb in selRe.AbbilityPairSelect)
+            if (selRe != null)
             {
-                int iscountered = 0;//0无法全部对应，1可以全部对应，2可能可以全部对应
-                string followersName = "";
-                foreach (TMyFollower Follower in myFollowers)
+                lsbMission1.SelectedIndex = selRe.SolIndex[0];
+                lsbMission2.SelectedIndex = selRe.SolIndex[1];
+                lsbMission3.SelectedIndex = selRe.SolIndex[2];
+                lsbMission4.SelectedIndex = selRe.SolIndex[3];
+                DataTable dtCountered = new DataTable();
+                dtCountered.Columns.Add("技能组合");
+                dtCountered.Columns.Add("应对追随者");
+                DataTable dtMayCountered = new DataTable();
+                dtMayCountered.Columns.Add("技能组合");
+                dtMayCountered.Columns.Add("应对追随者");
+                DataTable dtCannotCountered = new DataTable();
+                dtCannotCountered.Columns.Add("技能组合");
+                dtCannotCountered.Columns.Add("应对追随者");
+
+                foreach (int abb in selRe.AbbilityPairSelect)
                 {
-                    //iscountered = epicFollower.Counterable(abb);
-                    if (Follower.Counterable(abb) == 1)
+                    int iscountered = 0;//0无法全部对应，1可以全部对应，2可能可以全部对应
+                    string followersName = "";
+                    foreach (TMyFollower Follower in myFollowers)
                     {
-                        followersName += Follower.Name + "：";
-                        iscountered = 1;
-                    }
-                }
-                if (iscountered != 1)
-                {
-                    foreach (TMyFollower otherFollower in myFollowers)
-                    {
-                        if (otherFollower.Counterable(abb) == 2)
+                        //iscountered = epicFollower.Counterable(abb);
+                        if (Follower.Counterable(abb) == 1)
                         {
-                            followersName += otherFollower.Name + "：";
-                            iscountered = 2;
+                            followersName += Follower.Name + "：";
+                            iscountered = 1;
                         }
                     }
-                }
-                if (iscountered == 0)
-                {
-                    dtCannotCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
+                    if (iscountered != 1)
+                    {
+                        foreach (TMyFollower otherFollower in myFollowers)
+                        {
+                            if (otherFollower.Counterable(abb) == 2)
+                            {
+                                followersName += otherFollower.Name + "：";
+                                iscountered = 2;
+                            }
+                        }
+                    }
+                    if (iscountered == 0)
+                    {
+                        dtCannotCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
 
+                    }
+                    else if (iscountered == 1)
+                    {
+                        dtCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
+                    }
+                    else if (iscountered == 2)
+                    {
+                        dtMayCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
+                    }
                 }
-                else if (iscountered == 1)
-                {
-                    dtCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
-                }
-                else if (iscountered == 2)
-                {
-                    dtMayCountered.Rows.Add(new string[2] { GetAbbName(abb), followersName });
-                }
+                dtg1.DataContext = dtCountered;
+                dtg2.DataContext = dtMayCountered;
+                dtg3.DataContext = dtCannotCountered;
+
             }
-            dtg1.DataContext = dtCountered;
-            dtg2.DataContext = dtMayCountered;
-            dtg3.DataContext = dtCannotCountered;
+        }
 
-
+        private void cbbMission_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dtgMission.DataContext = (cbbMission.SelectedItem as TMission).dtMission;
         }
     }
     public class TRe
@@ -563,9 +575,9 @@ namespace FollowerSelect
     public class TOptedRe : TRe
     {
         //public TRe MissionArrangement;
-        public int CounteredCnt;
-        public int MayFullyCounteredCnt;
-        public int CannotCounteredCnt;
+        public int CounteredCnt{get;set;}
+        public int MayFullyCounteredCnt{get;set;}
+        public int CannotCounteredCnt { get; set; }
         public TOptedRe()
             : base()
         {
@@ -603,8 +615,8 @@ namespace FollowerSelect
 
     public class TSolOne
     {
-        //public int[] SolPair { set; get; }
-        public List<int> SolPair { set; get; }
+        //public int[] SolPair { get; set; }
+        public List<int> SolPair { get; set; }
         public TSolOne()
         {
             SolPair = new List<int>();
@@ -639,10 +651,10 @@ namespace FollowerSelect
     public class TMyFollower
     {
 
-        public string Name { set; get; }
-        public int Level { set; get; }
-        public int Quality { set; get; }   //2=绿 3=蓝 4=紫
-        public int Abbility { set; get; }
+        public string Name { get; set; }
+        public int Level { get; set; }
+        public int Quality { get; set; }   //2=绿 3=蓝 4=紫
+        public int Abbility { get; set; }
         public TMyFollower(string name, int level, int quality, int abbility)
         {
             this.Name = name;
@@ -729,6 +741,31 @@ namespace FollowerSelect
         public override string ToString()
         {
             return this.Name + " " + this.Quality.ToString() + " " + this.Abbility.ToString();
+        }
+    }
+
+    public class TMission
+    {
+        public DataTable dtMission { get; set; }
+        public string MissionName { get; set; }
+        public TMission(string name)
+        {
+            this.MissionName = name;
+            dtMission = new DataTable();
+            dtMission.Columns.Add("任务");
+            dtMission.Columns.Add("限时战斗");
+            dtMission.Columns.Add("强力法术");
+            dtMission.Columns.Add("重击");
+            dtMission.Columns.Add("群体伤害");
+            dtMission.Columns.Add("爪牙围攻");
+            dtMission.Columns.Add("危险区域");
+            dtMission.Columns.Add("致命爪牙");
+            dtMission.Columns.Add("魔法减益");
+            dtMission.Columns.Add("野生怪物入侵");
+        }
+        public override string ToString()
+        {
+            return this.MissionName;
         }
     }
 
