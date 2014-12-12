@@ -503,10 +503,12 @@ namespace FollowerSelect
             TOptedRe selRe = lsbOptedRe.SelectedItem as TOptedRe;
             if (selRe != null)
             {
-                lsbMission1.SelectedIndex = selRe.SolIndex[0];
+                /*lsbMission1.SelectedIndex = selRe.SolIndex[0];
                 lsbMission2.SelectedIndex = selRe.SolIndex[1];
                 lsbMission3.SelectedIndex = selRe.SolIndex[2];
-                lsbMission4.SelectedIndex = selRe.SolIndex[3];
+                lsbMission4.SelectedIndex = selRe.SolIndex[3];*/
+                if(cbbArrange.SelectedIndex > -1)
+                    lsbArrange.SelectedIndex = selRe.SolIndex[cbbArrange.SelectedIndex];
                 DataTable dtCountered = new DataTable();
                 dtCountered.Columns.Add("技能组合");
                 dtCountered.Columns.Add("应对追随者");
@@ -564,12 +566,17 @@ namespace FollowerSelect
 
         private void cbbMission_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            dtgMission.DataContext = (cbbMission.SelectedItem as TMission).dtMission;
+            if(cbbMission.SelectedItem != null)
+               dtgMission.DataContext = (cbbMission.SelectedItem as TMission).dtMission;
         }
 
         private void cbbArrange_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            lsbArrange.ItemsSource = (cbbArrange.SelectedItem as TArrangement).Arrangement;
+            if (cbbArrange.SelectedItem != null)
+            {
+                lsbArrange.ItemsSource = (cbbArrange.SelectedItem as TArrangement).Arrangement;
+                lsbArrange.SelectedIndex = (lsbOptedRe.SelectedItem as TOptedRe).SolIndex[cbbArrange.SelectedIndex];
+            }
         }
     }
     public class TRe
